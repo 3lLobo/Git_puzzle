@@ -63,15 +63,14 @@ def drag(event, x, y, flags, param):
                 dragging = True
     elif event == cv2.EVENT_LBUTTONUP:
         if x<=ans["black"].xpos & x>ans["black"].xpos-ans["black"].width & y<=ans["black"].ypos & y>ans["black"].ypos-ans["black"].heigth:
-            xNew = ans["black"].xpos
-            yNew = ans["black"].ypos
-            ans[marker].xpos = xNew
-            ans[marker].ypos = yNew
-            ans['black'].xpos = xOld
-            ans['black'].ypos = yOld
-            dragging = False
-            
-
+            if abs(x-ans["black"].xpos)<=ans["black"].width & abs(y-ans["black"].ypos)<=ans["black"].heigth:
+              xNew = ans["black"].xpos
+              yNew = ans["black"].ypos
+              ans[marker].xpos = xNew
+              ans[marker].ypos = yNew
+              ans['black'].xpos = xOld
+              ans['black'].ypos = yOld
+              dragging = False
 # load the image, clone it, and setup the mouse callback function
 
 image = cv2.imread("globe.jpg")
@@ -82,13 +81,13 @@ for ti in ans:
 clone = board.copy()
 
 cv2.namedWindow("board")
-cv2.setMouseCallback("board", drag)
 
 # keep looping until the 'q' key is pressed
 
 while True:
     # display the image and wait for a keypress
     cv2.imshow("board", board)
+    cv2.setMouseCallback("board", drag)
     key = cv2.waitKey(1) & 0xFF
     for ti in ans:
         board[ans[ti].xpos-ans[ti].width:ans[ti].xpos,ans[ti].ypos-ans[ti].heigth:ans[ti].ypos]= ans[ti].im
